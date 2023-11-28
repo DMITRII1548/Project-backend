@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Permissions\PermissionController;
 use App\Http\Controllers\Permissions\RolesController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,9 +56,18 @@ Route::prefix('category')->group(function () {
         Route::post('store-Category', [\App\Http\Controllers\CategoriesController::class, 'store']);
         Route::put('update-Category/{category}', [\App\Http\Controllers\CategoriesController::class, 'update']);
         Route::get('categories', [\App\Http\Controllers\CategoriesController::class, 'index']);
-        Route::delete('delete-Category/{id}', [\App\Http\Controllers\CategoriesController::class, 'delete']);
+        Route::delete('delete-Category/{category}', [\App\Http\Controllers\CategoriesController::class, 'delete']);
         Route::get('products-by-Category/{id}', [\App\Http\Controllers\CategoriesController::class, 'productsByCategory']);
         Route::get('get-info', [\App\Http\Controllers\CategoriesController::class, 'getInfo']);
+        Route::get('/{category}', [\App\Http\Controllers\CategoriesController::class, 'show']);
+});
+
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductsController::class, 'index']);
+    Route::get('/{product}', [ProductsController::class, 'show']);
+    Route::post('/', [ProductsController::class, 'store']);
+    Route::patch('/{product}', [ProductsController::class, 'update']);
+    Route::delete('/{product}', [ProductsController::class, 'delete']);
 });
 
 Route::prefix('post')->group(function () {

@@ -4,18 +4,18 @@ namespace App\Services\Category;
 use App\Models\Category;
 
 class CategoryService {
-    public function store($data)
+    public function store($info)
     {
-        if (Category::create($data)) {
+        if (Category::create($info)) {
                 return 'good';
             } else {
                 return 'bad';
         }
     }
 
-    public function update($category, $data)
+    public function update($category, $info)
     {
-        if ($category->update($data)) {
+        if ($category->update($info)) {
             return 'good';
         } else {
             return 'bad';

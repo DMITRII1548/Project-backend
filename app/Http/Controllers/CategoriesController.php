@@ -57,6 +57,11 @@ class CategoriesController extends BaseController
         return Category::get();
     }
 
+    public function show(Category $category)
+    {
+        return $category;
+    }
+
     public function restoreCategory()
     {
         $categories = Category::withTrashed()->get();
