@@ -5,6 +5,8 @@ use App\Http\Controllers\Permissions\PermissionController;
 use App\Http\Controllers\Permissions\RolesController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\OrdersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,35 +53,44 @@ Route::get('posts', function () {
     ]];
 });
 
+Route::prefix('clients')->group(function () {
+    Route::post('/', [ClientsController::class, 'store']);
+});
+
 Route::prefix('category')->group(function () {
-        Route::post('restore-Category', [\App\Http\Controllers\CategoriesController::class, 'restoreCategory']);
-        Route::post('store-Category', [\App\Http\Controllers\CategoriesController::class, 'store']);
-        Route::put('update-Category/{category}', [\App\Http\Controllers\CategoriesController::class, 'update']);
+        Route::post('restore-Category', [\App\Http\Controllers\CategoriesController::class, 'restoreCategory'])->middleware('checkAdminRole');
+        Route::post('store-Category', [\App\Http\Controllers\CategoriesController::class, 'store'])->middleware('checkAdminRole');
+        Route::put('update-Category/{category}', [\App\Http\Controllers\CategoriesController::class, 'update'])->middleware('checkAdminRole');
         Route::get('categories', [\App\Http\Controllers\CategoriesController::class, 'index']);
-        Route::delete('delete-Category/{category}', [\App\Http\Controllers\CategoriesController::class, 'delete']);
-        Route::get('products-by-Category/{id}', [\App\Http\Controllers\CategoriesController::class, 'productsByCategory']);
-        Route::get('get-info', [\App\Http\Controllers\CategoriesController::class, 'getInfo']);
+        Route::delete('delete-Category/{category}', [\App\Http\Controllers\CategoriesController::class, 'delete'])->middleware('checkAdminRole');
+        Route::get('products-by-Category/{category}', [\App\Http\Controllers\CategoriesController::class, 'productsByCategory']);
         Route::get('/{category}', [\App\Http\Controllers\CategoriesController::class, 'show']);
 });
 
 Route::prefix('products')->group(function () {
     Route::get('/', [ProductsController::class, 'index']);
     Route::get('/{product}', [ProductsController::class, 'show']);
-    Route::post('/', [ProductsController::class, 'store']);
-    Route::patch('/{product}', [ProductsController::class, 'update']);
-    Route::delete('/{product}', [ProductsController::class, 'delete']);
+    Route::post('/', [ProductsController::class, 'store'])->middleware('checkAdminRole');
+    Route::patch('/{product}', [ProductsController::class, 'update'])->middleware('checkAdminRole');
+    Route::delete('/{product}', [ProductsController::class, 'delete'])->middleware('checkAdminRole');
+});
+
+Route::prefix('orders')->group(function () {
+    Route::post('/', [OrdersController::class, 'store']);
+    Route::get('/', [OrdersController::class, 'index'])->middleware('checkAdminRole');
+    Route::delete('/{order}', [OrdersController::class, 'delete'])->middleware('checkAdminRole');
 });
 
 Route::prefix('post')->group(function () {
     Route::get('posts-controller', [PostsController::class, 'index']);
     Route::get('post/{id}', [PostsController::class, 'getPostById']);
     Route::get('post-all', [PostsController::class, 'getAll'])->middleware('checkAdminRole');;
-    Route::post('post-create', [PostsController::class, 'create']);
+    Route::post('post-create', [PostsController::class, 'create'])->middleware('checkAdminRole');
 
-    Route::put('post-update/{post}', [PostsController::class, 'update']);
+    Route::put('post-update/{post}', [PostsController::class, 'update'])->middleware('checkAdminRole');
 
 //Second lesson laravel
-    Route::post('post-store', [PostsController::class, 'store']);
+    Route::post('post-store', [PostsController::class, 'store'])->middleware('checkAdminRole');
     Route::get('post-by-title/{title}', [PostsController::class, 'getPostByTitle']);
 });
 
@@ -107,13 +118,3 @@ Route::get('/roles', [RolesController::class, 'getRoles'])->middleware(['jwt.aut
 
 // Find Role by Name
 Route::get('/roles/{name}', [RolesController::class, 'getRolesByName'])->middleware(['jwt.auth']);;
-
-// Create Permission
-Route::post('/permissions', [PermissionController::class, 'createPermission'])->middleware(['jwt.auth']);;
-
-// Get Permissions
-Route::get('/permissions', [PermissionController::class, 'index'])->middleware(['jwt.auth']);;
-
-// Find Permission by Name
-Route::get('/permissions/{name}', [PermissionController::class, 'findPermissionByName'])->middleware(['jwt.auth']);;
-

@@ -17,7 +17,11 @@ class RolesController extends Controller
     public function createRole(Request $request)
     {
         $name = $request->input('name');
-        $role = Role::create(['name' => $name]);
+
+        $role = Role::create([
+            'name' => $name,
+        ]);
+
         return response()->json($role);
     }
 
@@ -35,13 +39,12 @@ class RolesController extends Controller
     /**
      * Возвращает роль по имени.
      *
-     * @param  Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getRolesByName(Request $request)
+    public function getRolesByName(String $name)
     {
-        $name = $request->input('name');
-        $role = Role::where('name', $name)->first();
+        $role = Role::where('name', '=', $name)->first();
         return response()->json($role);
     }
+
 }

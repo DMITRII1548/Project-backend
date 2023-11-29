@@ -12,4 +12,13 @@ class Order extends Model
     use SoftDeletes;
     protected $guarded = false;
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
 }

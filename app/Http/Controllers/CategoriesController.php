@@ -79,7 +79,7 @@ class CategoriesController extends BaseController
      */
     public function productsByCategory(Category $category)
     {
-        return $category ? $category->products : 'ошибка';
+        return $category->products;
     }
 
     public function getInfo(Request $request)
