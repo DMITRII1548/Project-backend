@@ -105,7 +105,6 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class,'refresh']);
     Route::post('me', [AuthController::class ,'me']);
-
 });
 
 Route::post('register', [\App\Http\Controllers\RegisterController::class, 'register']);
